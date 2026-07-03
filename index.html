@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Phone Shop</title>
+<style>
+/* ===== Reset ===== */
+* {margin: 0; padding: 0; box-sizing: border-box;}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+  color: #222;
+  min-height: 100vh;
+}
+
+/* ===== Header ===== */
+header {
+  text-align: center;
+  padding: 40px 20px 25px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+header img {
+  width: 160px;
+}
+header h1 {
+  margin-top: 10px;
+  font-size: 2rem;
+  color: #111;
+}
+header p {
+  color: #555;
+  font-weight: 500;
+}
+
+/* ===== Navbar ===== */
+nav {
+  background: linear-gradient(90deg, #000000, #1a1a1a);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 40px;
+  flex-wrap: wrap;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.nav-left span {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #ffcc00;
+}
+.nav-center a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  position: relative;
+  transition: 0.3s;
+}
+.nav-center a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background: #ffcc00;
+  transition: 0.3s;
+}
+.nav-center a:hover::after, .nav-center a.active::after {
+  width: 100%;
+}
+.nav-right button {
+  background: #ffcc00;
+  color: #111;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.nav-right button:hover {
+  background: #ffdd33;
+}
+.user-email {
+  margin-left: 15px;
+  color: #00d2ff;
+  font-weight: bold;
+}
+
+/* ===== Products ===== */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+  padding: 40px 30px;
+}
+.product {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+.product img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.product h3 {
+  margin: 10px 0 5px;
+  font-size: 18px;
+}
+.product p {
+  color: #777;
+  font-size: 14px;
+}
+.product button {
+  margin: 10px 0 15px;
+  background: linear-gradient(90deg, #ffcc00, #ffaa00);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.product button:hover {
+  background: linear-gradient(90deg, #ffaa00, #ff8800);
+  transform: scale(1.05);
+}
+
+/* ===== Footer ===== */
+footer {
+  background: #111;
+  color: #ccc;
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+}
+
+/* ===== Modal ===== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+}
+.modal-content {
+  background: rgba(255,255,255,0.95);
+  border-radius: 15px;
+  width: 90%;
+  max-width: 380px;
+  padding: 25px;
+  margin: 10% auto;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  animation: fadeUp 0.4s ease;
+}
+@keyframes fadeUp {
+  from {transform: translateY(40px); opacity: 0;}
+  to {transform: translateY(0); opacity: 1;}
+}
+.modal-content h2 {
+  margin-bottom: 15px;
+}
+.modal-content input {
+  width: 85%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+}
+.modal-content input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px #007bff50;
+}
+.modal-content button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.modal-content button:hover {
+  background: #005ed1;
+}
+.close {
+  float: right;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+}
+.close:hover {color: #000;}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="Untitled-1.png" alt="Logo">
+  <h1>Black Phone Shop</h1>
+  <p>Your favorite gadgets at the best prices!</p>
+</header>
+
+<nav id="navbar">
+  <div class="nav-left">
+    <span> Black Phone Shop</span>
+  </div>
+  <div class="nav-center">
+    <a href="#" data-category="all" class="active">Home</a>
+    <a href="#" data-category="phone">Phones</a>
+    <a href="#" data-category="laptop">Laptops</a>
+    <a href="#" data-category="ipad">iPads</a>
+    <a href="#" data-category="macbook">MacBooks</a>
+  </div>
+  <div class="nav-right">
+    <button onclick="openModal('login')">Login</button>
+    <button onclick="openModal('signup')">Signup</button>
+    <span class="user-email" id="userEmail"></span>
+    
+  </div>
+
+  
+
+</nav>
+<!-- ===== Brand Banner Section ===== -->
+<section class="banner-carousel">
+  <div class="slides">
+    <div class="slide active">
+      <img src="banner and logo/iphone-17-pro-series-preorder-he.jpg" alt="iPhone 17 Pro Max">
+      <div class="text">
+      
+        <button onclick="location.href='product.html?product=iphone17s'">Shop Now →</button>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="banner and logo/SM_S24_PageBanner_APR2024.jpg" alt="Samsung S24 Ultra">
+      <div class="text">
+       
+        <button onclick="location.href='product.html?product=galaxys24ultra'">View More →</button>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="banner and logo/macbook.jpg" alt="MacBook M3">
+      <div class="text">
+        
+        <button onclick="location.href='product.html?product=macbookair'">Shop Now →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Arrows -->
+  <button class="prev" onclick="plusSlides(-1)">❮</button>
+  <button class="next" onclick="plusSlides(1)">❯</button>
+</section>
+
+<!-- ====== Style ====== -->
+<style>
+.banner-carousel {
+  position: relative;
+  overflow: hidden;
+  height: 500px;
+  width: 100%;
+}
+.slides {
+  display: flex;
+  transition: transform 1s ease;
+}
+.slide {
+  min-width: 100%;
+  position: relative;
+  text-align: center;
+}
+.slide img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  filter: brightness(80%);
+}
+.text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+}
+.text h2 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.text p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+.text button {
+  background: linear-gradient(90deg, #007aff, #00c6ff);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.text button:hover {
+  background: linear-gradient(90deg, #005eff, #00aaff);
+}
+
+/* Arrows */
+.prev, .next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.prev { left: 20px; }
+.next { right: 20px; }
+.prev:hover, .next:hover { background: rgba(0,0,0,0.7); }
+</style>
+
+<!-- ====== Script ====== -->
+<script>
+let slideIndex = 0;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+
+function showSlides(n) {
+  slides.forEach((slide, i) => {
+    slide.style.display = (i === n) ? 'block' : 'none';
+  });
+}
+
+function plusSlides(n) {
+  slideIndex = (slideIndex + n + totalSlides) % totalSlides;
+  showSlides(slideIndex);
+}
+
+function autoSlide() {
+  slideIndex = (slideIndex + 1) % totalSlides;
+  showSlides(slideIndex);
+}
+showSlides(slideIndex);
+setInterval(autoSlide, 4000); // Change every 4 seconds
+</script>
+
+<!-- ===== Brand Logos Section ===== -->
+<section class="brand-logos" style="
+  background:white;
+  padding:40px 20px;
+  text-align:center;
+">
+  <h2 style="font-size:24px; color:#111; margin-bottom:30px;">
+    <span style="color:#007bff;">POPULAR</span> BRANDS
+  </h2>
+  <div style="
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+  ">
+    <img src="image_product/Apple.jpg" alt="Apple" style="height:45px;">
+    <img src="image_product/Samsung.jpg" alt="Samsung" style="height:45px;">
+    <img src="image_product/OPPO.jpg" alt="OPPO" style="height:45px;">
+    <img src="image_product/vivo.jpg" alt="Vivo" style="height:45px;">
+    <img src="image_product/Huawei-Emblem.png" alt="Huawei" style="height:45px;">
+    <img src="image_product/Realme.jpg" alt="Realme" style="height:45px;">
+    <img src="image_product/Honor-Emblem.png" alt="HONOR" style="height:45px;">
+    <img src="image_product/xiaomi.png" alt="Xiaomi" style="height:45px;">
+    <img src="image_product/oneplus.jpg" alt="OnePlus" style="height:45px;">
+    <img src="image_product/Asus-Logo.png" alt="ASUS" style="height:45px;">
+    <img src="image_product/Nokia-Logo.png" alt="Nokia" style="height:45px;">
+    <img src="image_product/infinix.png" alt="Infinix" style="height:45px;">
+  </div>
+</section>
+
+<section class="products"></section>
+<!--Footer ខាងក្រោម-->
+<footer style="
+  background: linear-gradient(135deg, #0a0a0a, #1c1c1c);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  padding: 50px 20px 30px 20px;
+  border-top: 3px solid #00bcd4;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.4);
+  position: relative;
+">
+  <div style="
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: left;
+    max-width: 1200px;
+    margin: auto;
+  ">
+
+    <!-- About Us -->
+    <div style="flex: 1 1 250px; margin: 20px;">
+      <h3 style="color: #00bcd4;">About Black Phone Shop</h3>
+      <p style="color: #ccc; line-height: 1.6;">
+        Black Phone Shop ជាហាងលក់ទូរស័ព្ទដៃ កំព្យូទ័រ ឧបករណ៍បច្ចេកវិទ្យា និង accessory
+        ដ៏ទំនើប មានសេវាកម្មល្អ និងតម្លៃសមរម្យ។
+        យើងខ្ញុំផ្តោតលើគុណភាព និងការផ្តល់សេវាកម្មល្អបំផុតដល់អតិថិជន។
+      </p>
+    </div>
+
+    <!-- Support -->
+    <div style="flex: 1 1 200px; margin: 20px;">
+      <h3 style="color: #00bcd4;">Support</h3>
+      <ul style="list-style:none; padding:0; line-height: 2;">
+        <li><a href="#" style="color:#bbb; text-decoration:none;">FAQs</a></li>
+        <li><a href="#" style="color:#bbb; text-decoration:none;">Warranty Policy</a></li>
+        <li><a href="#" style="color:#bbb; text-decoration:none;">Return & Refund</a></li>
+        <li><a href="#" style="color:#bbb; text-decoration:none;">Shipping Info</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div style="flex: 1 1 250px; margin: 20px;">
+      <h3 style="color: #00bcd4;">Contact Us</h3>
+      <p style="color:#ccc; line-height:1.8;">
+        📞 Hotline: <a href="tel:0966024832" style="color:#00bcd4; text-decoration:none;">096 602 4832</a><br>
+        💬 Telegram: <a href="https://t.me/0966024832" target="_blank" style="color:#00bcd4; text-decoration:none;">@blackphoneshop</a><br>
+        📧 Email: <a href="mailto:info@blackphoneshop.com" style="color:#00bcd4; text-decoration:none;">info@blackphoneshop.com</a><br>
+        📍 Location: Phnom Penh, Cambodia
+      </p>
+
+      <div style="margin-top:10px;">
+        <a href="https://t.me/0966024832" target="_blank" style="margin-right:10px;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" style="width:24px;">
+        </a>
+        <a href="#" style="margin-right:10px;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Facebook_logo_36x36.svg" alt="Facebook" style="width:24px;">
+        </a>
+        <a href="#">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width:24px; border-radius:5px;">
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <hr style="margin: 30px auto; width: 70%; border: 0.5px solid #333;">
+
+  <p style="text-align:center; color:#777; font-size:13px;">
+    © 2025 <span style="color:#00bcd4;">Black Phone Shop</span> | All Rights Reserved.
+  </p>
+
+  <!-- Animated Glow Line ខាងក្រោម -->
+  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, #00bcd4, transparent); animation: move 3s linear infinite;"></div>
+
+  <style>
+    @keyframes move {
+      0% { background-position: -200px 0; }
+      100% { background-position: 200px 0; }
+    }
+    footer a:hover {
+      color: #fff !important;
+      text-shadow: 0 0 10px #00bcd4;
+    }
+  </style>
+</footer>
+
+
+<!--កន្លែងlogin -->
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2 id="modalTitle">Login</h2>
+    
+    <!-- Username Field -->
+    <input type="text" placeholder="Username" id="username"><br>
+    
+    <input type="text" placeholder="Email" id="email"><br>
+    <input type="password" placeholder="Password" id="password"><br>
+    <button id="modalButton">Submit</button>
+  </div>
+</div>
+
+
+
+<script>
+const products = [
+{name:"iPhone 17 Pro Max", price:1999, img:"image_product/iphone 17pro mix.png", id:"iphone17s", category:"phone"},
+{name:"iPhone 16 Pro Max", price:1399, img:"image_product/iphone-16-pro-max-desert-titanium.jpg", id:"iphone16s", category:"phone"},
+{name:"iPhone 16", price:1199, img:"image_product/iphone16.jpg", id:"iphone16", category:"phone"},
+{name:"iPhone 15 Pro", price:1299, img:"image_product/iphone-15-pro-gray.jpg", id:"iphone15pro", category:"phone"},
+{name:"Samsung Galaxy S23", price:899, img:"image_product/Galaxy-S23.jpg", id:"galaxys23", category:"phone"},
+{name:"Samsung Galaxy S24 Ultra", price:999, img:"image_product/S24.jpg", id:"galaxys24ultra", category:"phone"},
+{name:"Samsung Galaxy Note 22", price:700, img:"image_product/Samsung Galaxy Note 22.jpg", id:"galaxynote22", category:"phone"},
+{name:"OnePlus 11", price:699, img:"image_product/OnePlus 11.jpg", id:"oneplus11", category:"phone"},
+{name:"Google Pixel 8", price:799, img:"image_product/Google Pixel 8.jpg", id:"pixel8", category:"phone"},
+{name:"Sony Xperia 1 V", price:849, img:"image_product/Sony Xperia 1 V.jpg", id:"xperia1v", category:"phone"},
+{name:"Huawei Mate 60", price:799, img:"image_product/Huawei Mate 60.jpg", id:"mate60", category:"phone"},
+{name:"MacBook Air M3", price:1299, img:"image_product/MacBook Air M3.png", id:"macbookair", category:"macbook"},
+{name:"MacBook Pro 14", price:1999, img:"image_product/MacBook Pro 14.jpg", id:"macbookpro14", category:"macbook"},
+{name:"MacBook Pro M5", price:2199, img:"image_product/MacBook Pro M5.jpg", id:"macbookprom5", category:"macbook"},
+{name:"Mac Mini M3", price:699, img:"image_product/Mac Mini M3.jpg", id:"macmini", category:"macbook"},
+{name:"HP Pavilion 15", price:750, img:"image_product/HP Pavilion 15.png", id:"hppavilion", category:"laptop"},
+{name:"Dell XPS 13", price:1100, img:"image_product/Dell XPS 13.jpeg", id:"dellxps13", category:"laptop"},
+{name:"ASUS ZenBook 14", price:950, img:"image_product/ASUS ZenBook 14.jpg", id:"asuszenbook14", category:"laptop"},
+{name:"Lenovo ThinkPad X1", price:1200, img:"image_product/Lenovo ThinkPad X1.jpg", id:"thinkpadx1", category:"laptop"},
+{name:"Acer Aspire 7", price:850, img:"image_product/Acer Aspire 7.jpg", id:"aceraspire7", category:"laptop"},
+{name:"HP Envy 13", price:899, img:"image_product/HP Envy 13.jpg", id:"hpenvy13", category:"laptop"},
+{name:"iPad Pro 12.9", price:1099, img:"image_product/iPad Pro 12.9.jpg", id:"ipadpro129", category:"ipad"},
+{name:"iPad Air 5", price:599, img:"image_product/iPad Air 5.jpg", id:"ipadair5", category:"ipad"},
+{name:"iPad M1", price:899, img:"image_product/iPad M1.jpg", id:"iPad M1", category:"ipad"},
+{name:"iPad M5", price:1999, img:"image_product/iPad M5.jpg", id:"iPad M5", category:"ipad"},
+{name:"iPad Pro 2018", price:300, img:"image_product/ipad pro 2018.jpg", id:"iPadpro2018", category:"ipad"},
+];
+
+
+const container = document.querySelector('.products');
+const navbarLinks = document.querySelectorAll('#navbar .nav-center a');
+const userEmailSpan = document.getElementById('userEmail');
+
+function displayProducts(category='all'){
+  container.innerHTML='';
+  const filtered = category==='all'? products : products.filter(p=>p.category===category);
+  filtered.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='product';
+    div.innerHTML=`
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>Price: $${p.price}</p>
+      <button onclick="location.href='product.html?product=${p.id}'">View Details</button>
+    `;
+    container.appendChild(div);
+  });
+}
+navbarLinks.forEach(link=>{
+  link.addEventListener('click', e=>{
+    e.preventDefault();
+    navbarLinks.forEach(l=>l.classList.remove('active'));
+    link.classList.add('active');
+    displayProducts(link.getAttribute('data-category'));
+  });
+});
+displayProducts();
+
+function openModal(type){
+  document.getElementById('modal').style.display='block';
+  document.getElementById('modalTitle').innerText=type==='login'?'Login':'Signup';
+  document.getElementById('modalButton').innerText=type==='login'?'Login':'Signup';
+  document.getElementById('modalButton').onclick=function(){ handleAuth(type); }
+}
+function closeModal(){
+  document.getElementById('modal').style.display='none';
+  document.getElementById('email').value='';
+  document.getElementById('password').value='';
+}
+window.onclick=function(event){ if(event.target===document.getElementById('modal')) closeModal(); }
+
+function handleAuth(type){
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value.trim();
+  if(!email||!password){ alert("Please fill in all fields!"); return; }
+  if(type==='signup'){
+    if(localStorage.getItem(email)){ alert("User already exists!"); return; }
+    localStorage.setItem(email,password);
+    alert("Signup successful! You can now login.");
+    closeModal();
+  } else {
+    const storedPass = localStorage.getItem(email);
+    if(storedPass && storedPass===password){
+      alert(`Welcome ${email}!`);
+      userEmailSpan.innerText=email;
+      closeModal();
+    } else { alert("Invalid email or password!"); }
+  }
+}
+</script>
+</body>
+</html>
